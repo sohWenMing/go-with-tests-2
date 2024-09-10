@@ -7,3 +7,24 @@ func Sum(input []int) (sum int) {
 	}
 	return returned
 }
+
+func SumAll(numbersToSum ...[]int) []int {
+	var returnedSlice []int
+	for _, slice := range numbersToSum {
+		returnedSlice = append(returnedSlice, Sum(slice))
+	}
+	return returnedSlice
+}
+
+func SumAllTails(numbersToSum ...[]int) []int {
+	var returnedSlice []int
+	for _, slice := range numbersToSum {
+		if len(slice) == 0 {
+			returnedSlice = append(returnedSlice, 0)
+			continue
+		}
+		lastIndex := len(slice) - 1
+		returnedSlice = append(returnedSlice, slice[lastIndex])
+	}
+	return returnedSlice
+}
