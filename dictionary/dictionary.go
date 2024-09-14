@@ -9,9 +9,10 @@ type Dictionary map[string]string
 type DictionaryErr string
 
 const (
-	replaceValue  = "<value>"
-	errNotFound   = DictionaryErr("could not find the word you were looking for : <value>")
-	errWordExists = DictionaryErr("cannot add the word : <value> because it already exists in the dictionary")
+	replaceValue        = "<value>"
+	errNotFound         = DictionaryErr("could not find the word you were looking for : <value>")
+	errNotFoundOnUpdate = DictionaryErr("could not find the word you were looking for to update: <value>")
+	errWordExists       = DictionaryErr("cannot add the word : <value> because it already exists in the dictionary")
 )
 
 func (d Dictionary) Search(key string) (string, error) {
