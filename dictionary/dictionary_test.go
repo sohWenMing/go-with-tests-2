@@ -59,7 +59,23 @@ func TestUpdate(t *testing.T) {
 		value := "the value should not be updated"
 		err := dict.Update(key, value)
 		assertUnfoundError(t, err)
+	})
+}
 
+func TestDelete(t *testing.T) {
+	t.Run("testing delete, should throw error", func(t *testing.T) {
+		key := "unknown"
+		err := dict.Delete(key)
+		assertUnfoundError(t, err)
+	})
+	t.Run("testing delete, error should noot exist after operation", func(t *testing.T) {
+		key := "test"
+		err := dict.Delete(key)
+		assertNoError(t, err)
+		_, ok := dict[key]
+		if ok {
+			t.Error("Search on dictionary for key = 'test' shouls not yield value after delete")
+		}
 	})
 }
 
