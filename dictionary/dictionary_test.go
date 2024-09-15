@@ -90,16 +90,16 @@ func TestErrorGenerator(t *testing.T) {
 	}{
 		{
 			name: "Test errNotFound",
-			got:  generateError(errNotFound, key).Error(),
+			got:  processAndGenerateError(errNotFound, key).Error(),
 			want: fmt.Errorf("could not find the word you were looking for : %s", key).Error(),
 		}, {
 			name: "Test errWordExists",
-			got:  generateError(errWordExists, key).Error(),
+			got:  processAndGenerateError(errWordExists, key).Error(),
 			want: fmt.Errorf("cannot add the word : %s because it already exists in the dictionary", key).Error(),
 		},
 		{
 			name: "Test errNotFoundOnUpdate",
-			got:  generateError(errNotFoundOnUpdate, key).Error(),
+			got:  processAndGenerateError(errNotFoundOnUpdate, key).Error(),
 			want: fmt.Errorf("could not find the word you were looking for to update: %s", key).Error(),
 		},
 	}

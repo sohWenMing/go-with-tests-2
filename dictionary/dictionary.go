@@ -17,6 +17,10 @@ const (
 	errNotFoundOnDelete = DictionaryErr("could not find the word you were looking for the delete: <value>")
 )
 
+func (e DictionaryErr) Error() string {
+	return string(e)
+}
+
 const (
 	Search Operation = iota
 	Add
@@ -40,7 +44,7 @@ func (o Operation) String() string {
 func (d Dictionary) Search(key string) (string, error) {
 	v, ok := d[key]
 	if !ok {
-		return "", generateError(errNotFound, key)
+		return "", processAndGenerateError(errNotFound, key)
 	}
 	return v, nil
 }
@@ -72,9 +76,11 @@ func (d Dictionary) Delete(key string) (err error) {
 	return nil
 }
 
-func generateError(err DictionaryErr, key string) error {
-	errorString := string(err)
-	return errors.New(replaceErrorValue(errorString, key))
+func processAndGenerateError(e error, key string) error {
+	if value, ok := e.(DictionaryErr); ok {
+		return errors.New(replaceErrorValue(value.Error(), key))
+	}
+	return nil
 }
 
 func replaceErrorValue(errString, key string) string {
@@ -86,15 +92,15 @@ func searchValandCheckError(d Dictionary, key string, op Operation) (err error) 
 	switch op {
 	case Add:
 		if errFromSearch == nil {
-			return generateError(errWordExists, key)
+			return processAndGenerateError(errWordExists, key)
 		}
 	case Update:
 		if errFromSearch != nil {
-			return generateError(errNotFoundOnUpdate, key)
+			return processAndGenerateError(errNotFoundOnUpdate, key)
 		}
 	case Delete:
 		if errFromSearch != nil {
-			return generateError(errNotFoundOnDelete, key)
+			return processAndGenerateError(errNotFoundOnDelete, key)
 		}
 	}
 	return nil
